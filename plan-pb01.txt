@@ -1,0 +1,11 @@
+32 move-short viper px2y1 px2y2
+36 move-short viper px1y1 px2y1
+47 move-short viper px0y1 px1y1
+63 strike viper px0y1 px0y0
+root 2
+2 hunt  -> hunt_all 30 63 74
+30 move viper px2y2 px0y1 -> move-short-snake 32 34
+34 move viper px2y1 px0y1 -> move-short-snake 36 45
+45 move viper px1y1 px0y1 -> move-short-snake 47 61
+61 move viper px0y1 px0y1 -> move-base
+74 hunt  -> hunt_done

@@ -12,7 +12,7 @@ VAZIO_INV = -1
 VAZIO = 0
 CORPO = 1
 CABECA = 2
-MACA = 3
+RATO = 3
 LADO_QUADRADO = 50
 
 # Cores:
@@ -22,46 +22,48 @@ VERDE = (0, 180, 0)
 VERDE_ESCURO = (0, 64, 0)
 VERMELHO = (200, 0, 0)
 CINZA = (20, 20, 20)
+CINZA_CLARO = (200, 200, 200)
 CINZA_ESCURO = (70, 70, 70)
 LARANJA = (200, 100, 0)
+MARROM = (139, 69, 19)
 
 # Inicializando pygame:
 pygame.init()
-pygame.display.set_caption("Representação Snake - YOGI")
+pygame.display.set_caption("Visualizador Snake - YOGI")
 FONT = pygame.font.SysFont("Segoe UI", 15)
 
 
 def main():
     if len(sys.argv) != 3 and len(sys.argv) != 4:
-        print("Usage python [snake-representation.py] [problem-name.pddl] [plan-name.plan] [opt-interval]")
+        print("Usage: python [visualizador-snake-ipc2020.py] [problem-name] [plan-name] [opt-interval]")
         return -1
 
     arquivo_problema = open(sys.argv[1], "rt")
     arquivo_plano = open(sys.argv[2], "rt")
 
     dimensoes_mapa = {}
-    mapa, coord_maca, cobra = [], [], []
+    mapa, cobra = [], []
 
-    apos_objects = False
+    linha_location = False
     for linha in arquivo_problema.readlines():
-        x_idx = linha.rfind('s') + 1  # Início da coordenada x
-        y_idx = linha.rfind('-') + 1  # Início da coordenada y
+        x_idx = linha.rfind('x') + 1  # Início da coordenada x
+        y_idx = linha.rfind('y') + 1  # Início da coordenada y
 
-        if not apos_objects and linha.find("objects") != -1:
-            apos_objects = True  # Na linha após objects temos as dimensões do mapa
-        elif linha.find("goal") != -1:
-            break
-        elif apos_objects:
-            dimensoes_mapa['y'] = int(linha[y_idx:]) + 1
+        location_idx = linha.find(" - location")  # -1 se não existir
+        if not linha_location and location_idx != -1:
+            linha_location = True  # Na linha que tem location temos as dimensões do mapa
+
+        if linha_location:
+            dimensoes_mapa['y'] = int(linha[y_idx:location_idx]) + 1
             dimensoes_mapa['x'] = int(linha[x_idx:y_idx - 1]) + 1
             mapa = [0] * dimensoes_mapa['x'] * dimensoes_mapa['y']
-            apos_objects = False  # Não queremos sobreescrever sem querer as dimensões
-        elif linha.find("nextsnake") != -1:
+            linha_location = False  # Não queremos sobreescrever sem querer as dimensões
+        elif linha.find("connected") != -1:
             mapa[int(linha[x_idx:y_idx - 1]) + int(linha[y_idx:linha.rfind(')')]) * dimensoes_mapa['x']] = CORPO
-        elif linha.find("headsnake") != -1:
+        elif linha.find("head") != -1:
             mapa[int(linha[x_idx:y_idx - 1]) + int(linha[y_idx:linha.rfind(')')]) * dimensoes_mapa['x']] = CABECA
-        elif linha.find("ispoint") != -1:
-            coord_maca.append(int(linha[x_idx:y_idx - 1]) + int(linha[y_idx:linha.rfind(')')]) * dimensoes_mapa['x'])
+        elif linha.find("mouse-at") != -1:
+            mapa[int(linha[x_idx:y_idx - 1]) + int(linha[y_idx:linha.rfind(')')]) * dimensoes_mapa['x']] = RATO
     
     # Janela
     comprimento = (dimensoes_mapa['x'] + 2) * LADO_QUADRADO
@@ -69,40 +71,48 @@ def main():
     janela = pygame.display.set_mode((comprimento, altura))
 
     # Listas com elementos que serão adicionados e retirados do mapa
-    passos, novas_cabecas, antigas_cabecas, antigas_caldas, novas_macas = [], [], [], [], []
+    passos, novas_cabecas, antigas_cabecas, antigas_caldas = [], [], [], []
 
-    apos_plan_found = False
-    apos_steps = False
     for linha in arquivo_plano.readlines():
-        if linha.find("PLAN FOUND") != -1:
-            apos_plan_found = True  # Após isso iniciam-se os passos
-        elif linha.find("actions in the plan") != -1:
-            apos_steps = True  # Após isso terminam-se os passos
-        elif apos_plan_found and not apos_steps and linha.find("move") != -1:
-            passos.append(linha.removeprefix("STEP ").removesuffix('\n'))
+        if linha.find("move-long ") != -1:
+            passos.append(linha[linha.find(' ') + 1:].removesuffix('\n'))
 
-            x_idx = linha.find("pos") + 3
-            y_idx = x_idx + linha[x_idx:].find('-') + 1
-            virgula_idx = linha[y_idx:].find(',') + y_idx
-            antigas_cabecas.append((int(linha[x_idx:y_idx - 1]), int(linha[y_idx:virgula_idx])))
+            x_idx = linha.find('x') + 1
+            y_idx = linha.find('y') + 1
+            espaco_idx = linha[y_idx:].find(' ') + y_idx
+            novas_cabecas.append((int(linha[x_idx:y_idx - 1]), int(linha[y_idx:espaco_idx])))
 
-            x_idx = y_idx + linha[y_idx:].find("pos") + 3
-            y_idx = x_idx + linha[x_idx:].find('-') + 1
-            virgula_parenteses_idx = linha[y_idx:].find(',') + y_idx
-            
-            if virgula_parenteses_idx == y_idx - 1:
-                virgula_parenteses_idx = linha.find(')')
-            
-            novas_cabecas.append((int(linha[x_idx:y_idx - 1]), int(linha[y_idx:virgula_parenteses_idx])))
+            x_idx = y_idx + linha[y_idx:].find('x') + 1
+            y_idx = x_idx + linha[x_idx:].find('y') + 1
+            espaco_idx = linha[y_idx:].find(' ') + y_idx
+            antigas_cabecas.append((int(linha[x_idx:y_idx - 1]), int(linha[y_idx:espaco_idx])))
 
-            x_idx = y_idx + linha[y_idx:].find("pos") + 3
-            y_idx = x_idx + linha[x_idx:].find('-') + 1
-            virgula_idx = linha[y_idx:].find(',') + y_idx
+            x_idx = linha.rfind('x') + 1
+            y_idx = linha.rfind('y') + 1
+            antigas_caldas.append((int(linha[x_idx:y_idx - 1]), int(linha[y_idx:len(linha) - 1])))
+        elif linha.find("strike ") != -1:
+            passos.append(linha[linha.find(' ') + 1:].removesuffix('\n'))
 
-            if linha.find("move-and-eat-spawn") != -1:
-                novas_macas.append((int(linha[x_idx:y_idx - 1]), int(linha[y_idx:virgula_idx])))
-            elif linha.find("move-and-eat-no-spawn") == -1:
-                antigas_caldas.append((int(linha[x_idx:y_idx - 1]), int(linha[y_idx:virgula_idx])))
+            x_idx = linha.find('x') + 1
+            y_idx = linha.find('y') + 1
+            espaco_idx = linha[y_idx:].find(' ') + y_idx
+            antigas_cabecas.append((int(linha[x_idx:y_idx - 1]), int(linha[y_idx:espaco_idx])))
+
+            x_idx = linha.rfind('x') + 1
+            y_idx = linha.rfind('y') + 1
+            novas_cabecas.append((int(linha[x_idx:y_idx - 1]), int(linha[y_idx:len(linha) - 1])))
+        elif linha.find("move-short ") != -1:
+            passos.append(linha[linha.find(' ') + 1:].removesuffix('\n'))
+
+            x_idx = linha.find('x') + 1
+            y_idx = linha.find('y') + 1
+            espaco_idx = linha[y_idx:].find(' ') + y_idx
+            novas_cabecas.append((int(linha[x_idx:y_idx - 1]), int(linha[y_idx:espaco_idx])))
+
+            x_idx = linha.rfind('x') + 1
+            y_idx = linha.rfind('y') + 1
+            antigas_cabecas.append((int(linha[x_idx:y_idx - 1]), int(linha[y_idx:len(linha) - 1])))
+            antigas_caldas.append((int(linha[x_idx:y_idx - 1]), int(linha[y_idx:len(linha) - 1])))
 
     arquivo_problema.close()
     arquivo_plano.close()
@@ -133,13 +143,8 @@ def main():
         pygame.draw.line(janela, CINZA, (0, LADO_QUADRADO / 2), (comprimento, LADO_QUADRADO / 2), 2)
 
         # Pontos
-        janela.blit(FONT.render(str(pontos + 2), True, BRANCO),
+        janela.blit(FONT.render(str(pontos), True, BRANCO),
                     (comprimento - LADO_QUADRADO / 1.7, LADO_QUADRADO))
-
-        # Adiciona as maçãs da lista no mapa se tiver espaço para elas
-        for coord in coord_maca:
-            if mapa[coord] == VAZIO:
-                mapa[coord] = MACA
 
         for i in range(dimensoes_mapa['y']):
             janela.blit(FONT.render(str(i), True, CINZA_ESCURO), (LADO_QUADRADO - 20, (i + 1) * LADO_QUADRADO + 3))
@@ -160,16 +165,24 @@ def main():
                     cor = VERDE
                 elif valor == CABECA:
                     cor = VERDE_ESCURO
-                elif valor == MACA:
+                elif valor == RATO:
                     pygame.draw.rect(janela, PRETO, (x, y, LADO_QUADRADO, LADO_QUADRADO))  # Fundo do mapa
-                    pygame.draw.rect(janela, VERMELHO, (x + LADO_QUADRADO / 3, y + LADO_QUADRADO / 3,
-                                                        LADO_QUADRADO / 3, LADO_QUADRADO / 3))  # Maçã
-                    pygame.draw.rect(janela, VERDE, (x + LADO_QUADRADO / 3 + 1, y + LADO_QUADRADO / 3 - 6,
-                                                     LADO_QUADRADO / 6, LADO_QUADRADO / 6))  # Folha
+                    pygame.draw.rect(janela, CINZA_CLARO, (x + LADO_QUADRADO / 3, y + LADO_QUADRADO / 3,
+                                                        LADO_QUADRADO / 3, LADO_QUADRADO / 3))  # Corpo rato
+                    pygame.draw.rect(janela, VERMELHO, (x + LADO_QUADRADO / 3 + 1, y + LADO_QUADRADO / 2,
+                                                     LADO_QUADRADO / 12, LADO_QUADRADO / 12))  # Olho rato
+                    pygame.draw.rect(janela, VERMELHO, (x + LADO_QUADRADO / 2, y + LADO_QUADRADO / 2,
+                                                        LADO_QUADRADO / 12, LADO_QUADRADO / 12))  # Olho rato
+                    pygame.draw.rect(janela, MARROM, (x + LADO_QUADRADO / 2.3, y + LADO_QUADRADO / 1.8,
+                                                        LADO_QUADRADO / 12, LADO_QUADRADO / 12))  # Olho rato
+                    pygame.draw.rect(janela, MARROM, (x + LADO_QUADRADO / 2, y + LADO_QUADRADO / 6,
+                                                      LADO_QUADRADO / 12, LADO_QUADRADO / 6))  # Rabo rato 1
+                    pygame.draw.rect(janela, MARROM, (x + LADO_QUADRADO / 2, y + LADO_QUADRADO / 6,
+                                                      LADO_QUADRADO / 6, LADO_QUADRADO / 12))  # Rabo rato 2
                 elif valor == VAZIO_INV:
                     cor = BRANCO
 
-                if valor != MACA:
+                if valor != RATO:
                     pygame.draw.rect(janela, cor, (x, y, LADO_QUADRADO, LADO_QUADRADO))  # Cobra ou fundo do mapa
 
                 pygame.draw.line(janela, CINZA, (x, LADO_QUADRADO),
@@ -187,20 +200,16 @@ def main():
 
         # Enquanto ainda há passos/movimentos
         if qnt_movimentos < len(novas_cabecas):
-            # Se não comemos uma maçã nesse passo/movimento, deleta a calda antiga
-            if coord_maca.count(novas_cabecas[qnt_movimentos][0] + novas_cabecas[qnt_movimentos][1] * dimensoes_mapa['x']) == VAZIO:
+            mapa[antigas_cabecas[qnt_movimentos][0] + antigas_cabecas[qnt_movimentos][1] * dimensoes_mapa['x']] = 1  # Deleta cabeça antiga
+
+            # Se não comemos um rato nesse passo/movimento, deleta a calda antiga
+            if mapa[novas_cabecas[qnt_movimentos][0] + novas_cabecas[qnt_movimentos][1] * dimensoes_mapa['x']] == VAZIO:
                 mapa[antigas_caldas[qnt_movimentos - pontos][0] + antigas_caldas[qnt_movimentos - pontos][1] * dimensoes_mapa['x']] = VAZIO
-            # Se comemos, deleta a maçã comida e se ainda tiver cria uma nova
+            # Se comemos, aumenta os pontos
             else:
-                coord_maca.remove(novas_cabecas[qnt_movimentos][0] + novas_cabecas[qnt_movimentos][1] * dimensoes_mapa['x'])
-
-                if pontos < len(novas_macas):
-                    coord_maca.append(novas_macas[pontos][0] + novas_macas[pontos][1] * dimensoes_mapa['x'])
-
                 pontos += 1
 
             mapa[novas_cabecas[qnt_movimentos][0] + novas_cabecas[qnt_movimentos][1] * dimensoes_mapa['x']] = 2  # Cria nova cabeça
-            mapa[antigas_cabecas[qnt_movimentos][0] + antigas_cabecas[qnt_movimentos][1] * dimensoes_mapa['x']] = 1  # Deleta cabeça antiga
 
             qnt_movimentos += 1
 

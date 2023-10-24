@@ -1,0 +1,69 @@
+Madagascar 0.99999 17/01/2022 17:33:40 amd64 1-core (no VSIDS)
+Options: file:snake-domain.pddl file:snake-problem.pddl
+Domain: snake
+Problem: snake-empty-5x5-1-5-10-11170
+Parser: 54960 ground actions and 879 state variables
+Invariants: 0 1 2 3 4 5 6  0.17 secs
+Goal: conjunctive
+Simplified: 6709 ground actions and 181 state variables
+Actions: STRIPS
+Disabling graph %: 10 20 30 40 50 60 70 80 90 100 0.25 secs (max SCC size 1)
+Plan type: E-step
+                                Allocated 32 MB permanent (total 172 MB)
+Horizon 5: 34631 variables
+5 UNSAT (0 decisions 0 conflicts)
+Horizon 7: 48411 variables
+7 UNSAT (0 decisions 0 conflicts)
+Horizon 10: 69081 variables
+10 UNSAT (0 decisions 0 conflicts)
+Horizon 14: 96641 variables
+                                Allocated 32 MB (total 527 MB)
+Horizon 20: 137981 variables
+Horizon 28: 193101 variables
+Horizon 40: 275781 variables
+14 UNSAT (238 decisions 211 conflicts)
+                                Allocated 32 MB permanent (total 923 MB)
+Horizon 56: 386021 variables
+SAT (75 decisions 21 conflicts)
+PLAN FOUND: 56 steps
+STEP 0: move-and-eat-spawn(pos4-0,pos4-1,pos2-0,pos1-4)
+STEP 1: move-and-eat-spawn(pos4-1,pos3-1,pos1-4,pos1-1)
+STEP 2: move(pos3-1,pos2-1,pos3-0,pos4-0)
+STEP 3: move-and-eat-spawn(pos2-1,pos2-0,pos1-1,pos0-1)
+STEP 4: move(pos2-0,pos1-0,pos4-0,pos4-1)
+STEP 5: move(pos1-0,pos0-0,pos4-1,pos3-1)
+STEP 6: move(pos0-0,pos0-1,pos3-1,pos2-1)
+STEP 7: move(pos0-1,pos0-2,pos2-1,pos2-0)
+STEP 8: move(pos0-2,pos0-3,pos2-0,pos1-0)
+STEP 9: move-and-eat-spawn(pos0-3,pos0-4,pos0-1,pos3-3)
+STEP 10: move-and-eat-spawn(pos0-4,pos1-4,pos3-3,pos4-2)
+STEP 11: move-and-eat-spawn(pos1-4,pos1-3,pos4-2,pos3-4)
+STEP 12: move(pos1-3,pos2-3,pos1-0,pos0-0)
+STEP 13: move-and-eat-spawn(pos2-3,pos2-4,pos3-4,pos0-0)
+STEP 14: move-and-eat-spawn(pos2-4,pos3-4,pos0-0,pos1-2)
+STEP 15: move-and-eat-spawn(pos3-4,pos3-3,pos1-2,pos1-0)
+STEP 16: move(pos3-3,pos3-2,pos0-0,pos0-1)
+STEP 17: move(pos3-2,pos2-2,pos0-1,pos0-2)
+STEP 18: move-and-eat-spawn(pos2-2,pos1-2,pos1-0,dummypoint)
+STEP 19: move-and-eat-no-spawn(pos1-2,pos1-1)
+STEP 20: move-and-eat-no-spawn(pos1-1,pos0-1)
+STEP 21: move-and-eat-no-spawn(pos0-1,pos0-0)
+STEP 22: move-and-eat-no-spawn(pos0-0,pos1-0)
+STEP 23: move(pos1-0,pos2-0,pos0-2,pos0-3)
+STEP 24: move(pos2-0,pos3-0,pos0-3,pos0-4)
+STEP 25: move(pos3-0,pos3-1,pos0-4,pos1-4)
+STEP 26: move(pos3-1,pos4-1,pos1-4,pos1-3)
+STEP 27: move-and-eat-no-spawn(pos4-1,pos4-2)
+28 actions in the plan.
+total time 1.10 preprocess 0.56
+total size 1.035 GB
+max. learned clause length 33026
+t val conflicts decisions
+5 0 0 0
+7 0 0 0
+10 0 0 0
+14 0 211 238
+20 -1 240 302
+28 -1 180 224
+40 -1 120 157
+56 1 21 75
