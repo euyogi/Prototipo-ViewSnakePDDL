@@ -3,8 +3,7 @@
 <img alt="Header" width=100% src="https://capsule-render.vercel.app/api?type=waving&color=00ff00&height=100&section=header">
 
 Esse foi um projeto que fiz na disciplina Fundamentos Lógicos em Inteligência Artificial. Basicamente, permite visualizar
-os planos gerados pelo planejador PDDL para o domínio snake que participou da IPC 2018. Afinal, do que adianta um plano se não
-podemos por para teste?
+os planos gerados pelo planejador <a href="https://planning.wiki/guide/whatis/pddl">PDDL</a> para o domínio snake que participou da <a href="https://ipc2018.bitbucket.io/">IPC 2018</a>. Afinal, do que adianta um plano se não podemos por para teste?
 
 <h2>Para testar:</h2>
 
