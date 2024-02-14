@@ -16,7 +16,7 @@ python visualizador-snake-pddl.py [problem-name] [plan-name] [opt-interval]
 Os nomes dos arquivos devem conter também a extensão. [opt-interval] se refere à velocidade da execução
 da visualização, o padrão é 0.2, quanto menor mais rápido.
 
-Lembrando que está ajustado para os planos gerados pelo planejador Madagascar. Caso outro seja utilizado é necessário ajustar o
+Lembrando que está ajustado para os planos gerados pelo planejador <a href="https://research.ics.aalto.fi/software/sat/madagascar/">Madagascar</a>. Caso outro seja utilizado é necessário ajustar o
 código à sintaxe do planejador escolhido.
 
 Requer a biblioteca pygame.
