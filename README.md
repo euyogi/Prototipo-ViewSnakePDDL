@@ -1,6 +1,6 @@
 # Prototipo-ViewSnakePDDL
 
-<img alt="Header" width=100% src="https://capsule-render.vercel.app/api?type=waving&color=b03955&height=100&section=header">
+<img alt="Header" width=100% src="https://capsule-render.vercel.app/api?type=waving&color=00ff00&height=100&section=header">
 
 Esse foi um projeto que fiz na disciplina Fundamentos Lógicos em Inteligência Artificial. Basicamente, permite visualizar
 os planos gerados pelo planejador PDDL para o domínio snake que participou da IPC 2018. Afinal, do que adianta um plano se não
@@ -22,12 +22,12 @@ código à sintaxe do planejador escolhido.
 
 Requer a biblioteca pygame.
 
-<h2>Visualizador:</h2>
+<h2>Visualização do plano de teste:</h2>
 
-<p align="center"><img alt="Imagem do visualizador" src="https://github.com/euyogi/Prototipo-ViewSnakePDDL/assets/46427886/13d866c6-b8e2-4ea7-8edb-8f957936bee4"></p>
+<p align="center"><img alt="Imagem do visualizador" width="75%" src="https://github.com/euyogi/Prototipo-ViewSnakePDDL/assets/46427886/13d866c6-b8e2-4ea7-8edb-8f957936bee4"></p>
 
 <p align="center">
   Feito por: Yogi Nam de Souza Barbosa
 </p>
 
-<img alt="Footer" width=100% src="https://capsule-render.vercel.app/api?type=waving&color=b03955&height=100&section=footer">
+<img alt="Footer" width=100% src="https://capsule-render.vercel.app/api?type=waving&color=00ff00&height=100&section=footer">
