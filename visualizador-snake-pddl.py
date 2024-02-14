@@ -33,7 +33,7 @@ FONT = pygame.font.SysFont("Segoe UI", 15)
 
 def main():
     if len(sys.argv) != 3 and len(sys.argv) != 4:
-        print("Usage: python [visualizador-snake-ipc2018.py] [problem-name.pddl] [plan-name.txt] [opt-interval]")
+        print("Usage: python [visualizador-snake-pddl.py] [problem-name] [plan-name] [opt-interval]")
         return -1
 
     arquivo_problema = open(sys.argv[1], "rt")
