@@ -24,7 +24,7 @@ Requer a biblioteca pygame.
 
 <h2>Visualizador:</h2>
 
-![Gif do visualizador](https://github.com/euyogi/Prototipo-ViewSnakePDDL/assets/46427886/13d866c6-b8e2-4ea7-8edb-8f957936bee4)
+<p align="center"><img alt="Imagem do visualizador" src="https://github.com/euyogi/Prototipo-ViewSnakePDDL/assets/46427886/13d866c6-b8e2-4ea7-8edb-8f957936bee4"></p>
 
 <p align="center">
   Feito por: Yogi Nam de Souza Barbosa
